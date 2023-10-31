@@ -1,0 +1,21 @@
+@using Command.CommandConsumers
+@using Command.Components.Commands
+
+@if (History is not null)
+{
+    <table>
+        <PhazorReactiveForEach Elements="History.Commands" Context="command">
+            <CommandComponent Command="command" Consumer="Consumer"/>
+        </PhazorReactiveForEach>
+    </table>
+}
+
+@code {
+
+    [Parameter]
+    public CommandHistory? History { get; set; }
+
+    [Parameter]
+    public ICommandConsumer? Consumer { get; set; }
+
+}

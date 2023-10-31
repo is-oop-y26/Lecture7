@@ -1,0 +1,33 @@
+@using Command.Models
+@using Command.Commands
+@using Command.CommandConsumers
+
+<MudStack Row="true">
+    <MudTextField T="string" @bind-Text="_value"/>
+    <MudButton OnClick="@OnAddClicked">Add</MudButton>
+</MudStack>
+
+@code {
+
+    private string _value = string.Empty;
+
+    [Parameter]
+    public ToDoList? List { get; set; }
+
+    [Parameter]
+    public ICommandConsumer? Consumer { get; set; }
+
+    public void OnAddClicked()
+    {
+        if (List is null || Consumer is null)
+            return;
+
+        var item = new ToDoItem(_value);
+        var command = new AddItemCommand(List, item);
+
+        Consumer.Consume(command);
+
+        _value = string.Empty;
+    }
+
+}

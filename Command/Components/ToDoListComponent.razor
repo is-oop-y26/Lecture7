@@ -1,0 +1,21 @@
+@using Command.Models
+@using Command.CommandConsumers
+
+@if (List is not null)
+{
+    <MudList>
+        <PhazorReactiveForEach Elements="List.Items" Context="item">
+            <ToDoItemComponent List="List" Item="item" Consumer="Consumer"/>
+        </PhazorReactiveForEach>
+    </MudList>
+}
+
+@code {
+
+    [Parameter]
+    public ToDoList? List { get; set; }
+    
+    [Parameter]
+    public ICommandConsumer Consumer { get; set; }
+
+}

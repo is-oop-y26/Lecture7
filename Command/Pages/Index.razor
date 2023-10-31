@@ -1,0 +1,32 @@
+﻿@page "/"
+@using Command.Models
+@using Command.CommandConsumers
+@using Command.Commands
+
+<MudStack>
+
+    <ItemEditorComponent List="_list" Consumer="_consumer"/>
+
+    <MudStack Row="true">
+        <CommandHistoryComponent History="_history" Consumer="_consumer"/>
+        <ToDoListComponent List="_list" Consumer="_consumer"/>
+    </MudStack>
+
+</MudStack>
+
+@code {
+
+    private readonly ToDoList _list;
+    private readonly CommandHistory _history;
+    private readonly ICommandConsumer _consumer;
+
+    public Index()
+    {
+        _list = new ToDoList();
+        _history = new CommandHistory();
+        _consumer = new CommandConsumer(_history);
+        
+        _consumer.Consume(new RemoveItemCommand(_list, new ToDoItem("aboba")));
+    }
+
+}

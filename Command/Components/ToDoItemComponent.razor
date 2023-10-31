@@ -1,0 +1,46 @@
+@using Command.Models
+@using Command.CommandConsumers
+@using Command.Commands
+
+@if (Item is not null)
+{
+    <MudContainer Class="p-2">
+        <MudListItem>
+            <MudStack Row="true">
+                <MudTextField T="string" TextChanged="@OnTextChanged" Text="@Item.Name" Immediate="false"/>
+                <MudIconButton OnClick="@OnRemoveClicked" Icon="@Icons.Material.Filled.Remove"/>
+            </MudStack>
+        </MudListItem>
+    </MudContainer>
+}
+
+@code {
+
+    [Parameter]
+    public ToDoList? List { get; set; }
+
+    [Parameter]
+    public ToDoItem? Item { get; set; }
+    
+    [Parameter]
+    public ICommandConsumer? Consumer { get; set; }
+
+    public void OnTextChanged(string value)
+    {
+        if (Item is null || Consumer is null)
+            return;
+
+        var command = new ChangeNameCommand(Item, value);
+        Consumer.Consume(command);
+    }
+
+    public void OnRemoveClicked()
+    {
+        if (Item is null || List is null || Consumer is null)
+            return;
+
+        var command = new RemoveItemCommand(List, Item);
+        Consumer.Consume(command);
+    }
+
+}
